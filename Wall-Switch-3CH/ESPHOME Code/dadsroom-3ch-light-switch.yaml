@@ -1,0 +1,114 @@
+esphome:
+  name: 3ch-light-switch
+  friendly_name: 3ch-light-switch
+
+esp8266:
+  board: esp01_1m
+#  restore_from_flash: true
+
+#preferences:
+#  flash_write_interval: 30s
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "REPLACE_WITH_YOUR_KEY"
+  reboot_timeout: 0s
+
+ota:
+  password: "REPLACE_WITH_YOUR_PASSWORD"
+
+wifi:
+  networks:
+    - ssid: YOUR_HOME_WIFI_1
+      password: YOUR_HOME_WIFI_PASSWORD
+    - ssid: !secret YOUR_HOME_WIFI_2
+      password: !secret YOUR_HOME_WIFI_PASSWORD
+
+  reboot_timeout: 0s
+  manual_ip:
+    static_ip: 192.168.1.XXX
+    gateway: 192.168.1.1
+    subnet: 255.255.255.0
+    
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "3ch-light-switch-backup"
+    password: "ANY_PASSWORD"
+
+web_server:
+  port: 80
+#  auth:
+#    username: admin
+#    password: PASSWORD
+captive_portal:
+    
+# R1: GPIO4
+# R2: GPIO13
+# R3: GPIO5
+
+# (Active HIGH)
+switch:
+  - platform: gpio
+    name: Balcony Light
+    pin: GPIO4
+#    inverted: yes
+    id: room_door_light
+#    restore_mode: RESTORE_DEFAULT_ON
+    
+  - platform: gpio
+    name: Door Light
+    pin: GPIO13
+#    inverted: yes
+    id: room_balcony_light
+#    restore_mode: RESTORE_DEFAULT_ON
+        
+  - platform: gpio
+    name: Small Light
+    pin: GPIO5
+#    inverted: yes
+    id: room_small_light
+
+#    restore_mode: RESTORE_DEFAULT_ON
+
+# B1: GPIO12
+# B2: GPIO14
+# B3: GPIO16
+
+# (Active LOW)
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO12
+      mode:
+        input: true
+        pullup: true
+    id: room_door_light_switch
+#    on_state:
+    on_press:
+      then:
+        - switch.toggle: room_door_light
+
+  - platform: gpio
+    pin:
+      number: GPIO14
+      mode:
+        input: true
+        pullup: true
+    id: room_balcony_light_switch
+#    on_state:
+    on_press:
+      then:
+        - switch.toggle: room_balcony_light
+
+  - platform: gpio
+    # external 10kohm resistor.
+    pin: GPIO16
+    id: room_small_light_switch
+  #  on_state:
+    on_press:
+      then:
+        - switch.toggle: room_small_light
