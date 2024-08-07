@@ -8,9 +8,9 @@ PC817c optocoupler,3
 Relay SPDT 5V-DC 220V-AC ,3
 1N4007 Diode SMD A7 or M7,3
 Tactile Switch Push Button SPST 3.5x6x4.3mm,1
-JST 2 PIN,1
-JST 4 PIN,2
-JST 5 PIN,2
+JST 2 PIN 2.54mm,1
+JST 4 PIN 2.54mm,2
+JST 5 PIN 2.54mm,2
 6 pin female pinheader,1
 resistor 220 ohm smd 0805,3
 resistor 1k ohm smd 0805,1
